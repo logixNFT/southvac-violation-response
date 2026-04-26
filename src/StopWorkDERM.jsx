@@ -91,10 +91,24 @@ export default function StopWorkDERM() {
       const ph = msg.match(/[\(]?\d{3}[\)\-\.\s]?\s?\d{3}[\-\.\s]?\d{4}/);
       const nm = msg.replace(em?.[0] || "", "").replace(ph?.[0] || "", "").replace(/[,\-\/|]/g, " ").trim();
       const cid = "SV-VR-" + Date.now().toString(36).toUpperCase();
-      setCaseData(d => ({ ...d, name: nm, phone: ph?.[0], email: em?.[0], caseId: cid }));
+      const fullCase = { ...caseData, name: nm, phone: ph?.[0], email: em?.[0], caseId: cid };
+      setCaseData(() => fullCase);
       botReply(`<b style="color:#4ADE80">✅ Case Opened: ${cid}</b><br><br>Violation type: ${caseData.type?.label}<br>County: ${caseData.county}<br>Contact: ${nm}<br><br>${caseData.type?.urgency === "IMMEDIATE" ? "🚨 <b>PRIORITY DISPATCH</b> — Our compliance team is mobilizing now. Expect a call within <b>15 minutes</b>." : "Our compliance specialist will call you within <b>30 minutes</b> to review the violation and schedule a site visit."}<br><br>In the meantime: <b>do not resume work</b> until we've assessed the corrective requirements. Continuing work under a stop work order escalates penalties significantly.`, 800);
       setChatPhase("done");
-      console.log("=== VIOLATION CASE ===", JSON.stringify({ ...caseData, name: nm, phone: ph?.[0], email: em?.[0], caseId: cid }, null, 2));
+      fetch("/api/notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          caseId: cid,
+          type: caseData.type,
+          county: caseData.county,
+          date: caseData.date,
+          details: caseData.details,
+          name: nm,
+          phone: ph?.[0],
+          email: em?.[0],
+        }),
+      }).catch(() => {});
     } else if (chatPhase === "done") {
       botReply("Your case is active. Our team is on it. For immediate questions, call or text <b>(786) 277-7534</b>.");
     }
@@ -114,6 +128,9 @@ export default function StopWorkDERM() {
           <span style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "2px", color: C.danger, fontWeight: 700, background: "rgba(255,77,77,.12)", padding: "4px 12px", borderRadius: 6 }}>Violation Response</span>
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <a href="mailto:info@southvacdewatering.com" style={{ display: "flex", alignItems: "center", gap: 7, color: C.tx2, textDecoration: "none", fontSize: 13, fontWeight: 600, padding: "8px 14px", border: `1px solid ${C.brd}`, borderRadius: 8, background: C.el }}>
+            <span style={{ fontSize: 15 }}>✉️</span> info@southvacdewatering.com
+          </a>
           <a href="tel:+17862777534" style={{ display: "flex", alignItems: "center", gap: 7, color: C.tx2, textDecoration: "none", fontSize: 13, fontWeight: 600, padding: "8px 14px", border: `1px solid ${C.brd}`, borderRadius: 8, background: C.el }}>
             <span style={{ fontSize: 15 }}>📞</span> (786) 277-7534
           </a>
