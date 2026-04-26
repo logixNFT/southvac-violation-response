@@ -96,7 +96,7 @@ export default function StopWorkDERM() {
       setChatPhase("done");
       console.log("=== VIOLATION CASE ===", JSON.stringify({ ...caseData, name: nm, phone: ph?.[0], email: em?.[0], caseId: cid }, null, 2));
     } else if (chatPhase === "done") {
-      botReply("Your case is active. Our team is on it. For immediate questions, call <b>(954) 555-0199</b> — ask for the compliance desk.");
+      botReply("Your case is active. Our team is on it. For immediate questions, call or text <b>(786) 277-7534</b>.");
     }
   }
 
@@ -113,11 +113,24 @@ export default function StopWorkDERM() {
           <span style={{ fontFamily: "'Instrument Serif', serif", fontSize: 22 }}>South<b style={{ color: C.acc }}>Vac</b></span>
           <span style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "2px", color: C.danger, fontWeight: 700, background: "rgba(255,77,77,.12)", padding: "4px 12px", borderRadius: 6 }}>Violation Response</span>
         </div>
-        <div style={{ display: "flex", gap: 10 }}>
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <a href="tel:+17862777534" style={{ display: "flex", alignItems: "center", gap: 7, color: C.tx2, textDecoration: "none", fontSize: 13, fontWeight: 600, padding: "8px 14px", border: `1px solid ${C.brd}`, borderRadius: 8, background: C.el }}>
+            <span style={{ fontSize: 15 }}>📞</span> (786) 277-7534
+          </a>
           <button onClick={() => setChatOpen(!chatOpen)} style={{ background: C.danger, color: "#fff", border: "none", padding: "9px 20px", borderRadius: 8, fontWeight: 700, fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>
             {chatOpen ? "✕ Close" : "🚨 Open Emergency Case"}
           </button>
         </div>
+      </div>
+
+      {/* FLOATING CONTACT WIDGET */}
+      <div style={{ position: "fixed", bottom: 24, right: 24, zIndex: 200, display: "flex", flexDirection: "column", gap: 10, alignItems: "flex-end" }}>
+        <a href="sms:+17862777534" style={{ display: "flex", alignItems: "center", gap: 8, background: "#25D366", color: "#fff", textDecoration: "none", padding: "11px 18px", borderRadius: 50, fontWeight: 700, fontSize: 13, boxShadow: "0 4px 20px rgba(37,211,102,.4)", fontFamily: "'DM Sans', sans-serif" }}>
+          💬 Text Us Now
+        </a>
+        <a href="tel:+17862777534" style={{ display: "flex", alignItems: "center", gap: 8, background: C.danger, color: "#fff", textDecoration: "none", padding: "11px 18px", borderRadius: 50, fontWeight: 700, fontSize: 13, boxShadow: "0 4px 20px rgba(255,77,77,.4)", fontFamily: "'DM Sans', sans-serif" }}>
+          📞 Call (786) 277-7534
+        </a>
       </div>
 
       <div style={{ display: "flex", height: "calc(100vh - 56px)" }}>
@@ -233,18 +246,28 @@ export default function StopWorkDERM() {
             <div style={{ fontSize: 36, marginBottom: 12 }}>🚨</div>
             <h2 style={{ fontFamily: "'Instrument Serif', serif", fontSize: 32, marginBottom: 12 }}>Don't Let Fines Stack Up</h2>
             <p style={{ fontSize: 15, color: C.tx2, maxWidth: 500, margin: "0 auto 24px", lineHeight: 1.7 }}>Every hour under a stop work order is schedule delay, daily fines, and Owner confidence erosion. We mobilize within 4 hours.</p>
-            <button onClick={() => setChatOpen(true)} style={{ background: C.danger, color: "#fff", border: "none", padding: "16px 36px", borderRadius: 10, fontWeight: 700, fontSize: 15, cursor: "pointer", fontFamily: "inherit" }}>Open Emergency Case Now →</button>
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <button onClick={() => setChatOpen(true)} style={{ background: C.danger, color: "#fff", border: "none", padding: "16px 36px", borderRadius: 10, fontWeight: 700, fontSize: 15, cursor: "pointer", fontFamily: "inherit" }}>Open Emergency Case →</button>
+              <a href="tel:+17862777534" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "transparent", color: C.tx, border: `1px solid ${C.brd}`, padding: "16px 36px", borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: "none", fontFamily: "inherit" }}>📞 (786) 277-7534</a>
+              <a href="sms:+17862777534" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "#25D36622", color: "#25D366", border: "1px solid #25D36644", padding: "16px 36px", borderRadius: 10, fontWeight: 700, fontSize: 15, textDecoration: "none", fontFamily: "inherit" }}>💬 Text Us</a>
+            </div>
           </div>
         </div>
 
         {/* CHAT */}
         {chatOpen && (
           <div style={{ width: 400, borderLeft: `1px solid ${C.brd}`, display: "flex", flexDirection: "column", background: C.card, flexShrink: 0 }}>
-            <div style={{ padding: "16px 18px", borderBottom: `1px solid ${C.brd}`, display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 36, height: 36, background: C.danger, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 700, color: "#fff" }}>!</div>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700 }}>Violation Response Agent</div>
-                <div style={{ fontSize: 10, color: "#4ADE80" }}>● Priority line — immediate response</div>
+            <div style={{ padding: "16px 18px", borderBottom: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div style={{ width: 36, height: 36, background: C.danger, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 700, color: "#fff" }}>!</div>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700 }}>Violation Response Agent</div>
+                  <div style={{ fontSize: 10, color: "#4ADE80" }}>● Priority line — immediate response</div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 6 }}>
+                <a href="tel:+17862777534" title="Call" style={{ width: 32, height: 32, borderRadius: 8, background: C.el, border: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, textDecoration: "none" }}>📞</a>
+                <a href="sms:+17862777534" title="Text" style={{ width: 32, height: 32, borderRadius: 8, background: C.el, border: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, textDecoration: "none" }}>💬</a>
               </div>
             </div>
             <div style={{ flex: 1, overflow: "auto", padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
