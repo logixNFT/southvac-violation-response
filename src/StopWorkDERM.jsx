@@ -180,7 +180,7 @@ export default function StopWorkDERM() {
             <span style={{ fontSize: 15 }}>📞</span> (786) 277-7534
           </a>
           <button onClick={() => setChatOpen(!chatOpen)} style={{ background: C.danger, color: "#fff", border: "none", padding: "9px 20px", borderRadius: 8, fontWeight: 700, fontSize: 12, cursor: "pointer", fontFamily: "inherit" }}>
-            {chatOpen ? "✕ Close" : "🚨 Open Emergency Case"}
+            🚨 Emergency Case
           </button>
         </div>
       </div>
@@ -274,9 +274,8 @@ export default function StopWorkDERM() {
         </div>
       )}
 
-      <div style={{ display: "flex", height: "calc(100vh - 56px)" }}>
-        {/* MAIN */}
-        <div style={{ flex: 1, overflow: "auto", padding: "32px 40px", maxWidth: chatOpen ? "calc(100% - 400px)" : "100%" }}>
+      <div style={{ height: "calc(100vh - 56px)", overflow: "auto" }}>
+        <div style={{ padding: "32px 40px" }}>
           {/* HERO */}
           <div style={{ marginBottom: 48 }}>
             <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "2.5px", color: C.danger, fontWeight: 700, marginBottom: 14 }}>Stop Work & Environmental Compliance</div>
@@ -394,49 +393,78 @@ export default function StopWorkDERM() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* CHAT */}
-        {chatOpen && (
-          <div style={{ width: 400, borderLeft: `1px solid ${C.brd}`, display: "flex", flexDirection: "column", background: C.card, flexShrink: 0 }}>
-            <div style={{ padding: "16px 18px", borderBottom: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{ width: 36, height: 36, background: C.danger, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 700, color: "#fff" }}>!</div>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700 }}>Violation Response Agent</div>
-                  <div style={{ fontSize: 10, color: "#4ADE80" }}>● Priority line — immediate response</div>
-                </div>
+      {/* FLOATING CHAT BUTTON — bottom left */}
+      <button onClick={() => setChatOpen(!chatOpen)} style={{
+        position: "fixed", bottom: 24, left: 24, zIndex: 310,
+        background: C.danger, color: "#fff", border: "none",
+        borderRadius: 50, padding: "13px 20px",
+        fontWeight: 700, fontSize: 13, cursor: "pointer",
+        fontFamily: "'DM Sans', sans-serif",
+        display: "flex", alignItems: "center", gap: 8,
+        boxShadow: "0 4px 24px rgba(255,77,77,.45)",
+      }}>
+        {chatOpen ? "✕ Close" : <><span style={{ fontSize: 16 }}>🚨</span> Open Emergency Case</>}
+      </button>
+
+      {/* FLOATING CHAT WIDGET — bottom left */}
+      {chatOpen && (
+        <div style={{
+          position: "fixed", bottom: 82, left: 24, zIndex: 309,
+          width: 360, height: 500,
+          background: C.card, border: `1px solid ${C.brd}`,
+          borderRadius: 20, display: "flex", flexDirection: "column",
+          boxShadow: "0 8px 48px rgba(0,0,0,.55)",
+          animation: "chatSlide .25s ease",
+        }}>
+          <style>{`@keyframes chatSlide { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }`}</style>
+
+          {/* header */}
+          <div style={{ padding: "14px 16px", borderBottom: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "space-between", borderRadius: "20px 20px 0 0", background: C.el }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ width: 34, height: 34, background: C.danger, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 700, color: "#fff" }}>!</div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700 }}>Violation Response Agent</div>
+                <div style={{ fontSize: 10, color: "#4ADE80" }}>● Priority line — immediate response</div>
               </div>
-              <div style={{ display: "flex", gap: 6 }}>
-                <a href="tel:+17862777534" title="Call" style={{ width: 32, height: 32, borderRadius: 8, background: C.el, border: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, textDecoration: "none" }}>📞</a>
-                <a href="sms:+17862777534" title="Text" style={{ width: 32, height: 32, borderRadius: 8, background: C.el, border: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, textDecoration: "none" }}>💬</a>
-              </div>
             </div>
-            <div style={{ flex: 1, overflow: "auto", padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
-              {messages.map((m, i) => (
-                <div key={i} style={{
-                  maxWidth: "88%", padding: "11px 15px", borderRadius: 14, fontSize: 13, lineHeight: 1.6,
-                  ...(m.r === "user"
-                    ? { background: C.danger, color: "#fff", alignSelf: "flex-end", borderBottomRightRadius: 3, fontWeight: 500 }
-                    : { background: C.el, border: `1px solid ${C.brd}`, alignSelf: "flex-start", borderBottomLeftRadius: 3 })
-                }} dangerouslySetInnerHTML={{ __html: m.t }} />
-              ))}
-              <div ref={chatEnd} />
-            </div>
-            <div style={{ padding: "12px 16px", borderTop: `1px solid ${C.brd}`, display: "flex", gap: 8 }}>
-              <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && handleChat(input)}
-                placeholder="Describe your violation..."
-                style={{ flex: 1, background: C.el, border: `1px solid ${C.brd}`, borderRadius: 10, padding: "10px 14px", color: C.tx, fontFamily: "inherit", fontSize: 13, outline: "none" }} />
-              <button onClick={() => handleChat(input)}
-                style={{ background: C.danger, border: "none", borderRadius: 10, width: 40, height: 40, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 16, color: "#fff" }}>➤</button>
-            </div>
-            <div style={{ padding: "8px 16px 12px", display: "flex", gap: 6, flexWrap: "wrap" }}>
-              {["Stop Work Order", "Turbidity Violation", "SWPPP Deficiency", "Unpermitted Dewatering"].map((q, i) => (
-                <button key={i} onClick={() => handleChat(q)} style={{ background: C.bg, border: `1px solid ${C.brd}`, color: C.tx2, padding: "5px 10px", borderRadius: 100, fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}>{q}</button>
-              ))}
+            <div style={{ display: "flex", gap: 6 }}>
+              <a href="tel:+17862777534" title="Call" style={{ width: 30, height: 30, borderRadius: 8, background: C.bg, border: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, textDecoration: "none" }}>📞</a>
+              <a href="sms:+17862777534" title="Text" style={{ width: 30, height: 30, borderRadius: 8, background: C.bg, border: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, textDecoration: "none" }}>💬</a>
             </div>
           </div>
-        )}
-      </div>
+
+          {/* messages */}
+          <div style={{ flex: 1, overflow: "auto", padding: 14, display: "flex", flexDirection: "column", gap: 10 }}>
+            {messages.map((m, i) => (
+              <div key={i} style={{
+                maxWidth: "88%", padding: "10px 14px", borderRadius: 14, fontSize: 13, lineHeight: 1.6,
+                ...(m.r === "user"
+                  ? { background: C.danger, color: "#fff", alignSelf: "flex-end", borderBottomRightRadius: 3, fontWeight: 500 }
+                  : { background: C.el, border: `1px solid ${C.brd}`, alignSelf: "flex-start", borderBottomLeftRadius: 3 })
+              }} dangerouslySetInnerHTML={{ __html: m.t }} />
+            ))}
+            <div ref={chatEnd} />
+          </div>
+
+          {/* quick replies */}
+          <div style={{ padding: "6px 12px", display: "flex", gap: 6, flexWrap: "wrap", borderTop: `1px solid ${C.brd}` }}>
+            {["Stop Work Order", "Turbidity", "SWPPP / BMP", "Dewatering"].map((q, i) => (
+              <button key={i} onClick={() => handleChat(q)} style={{ background: C.bg, border: `1px solid ${C.brd}`, color: C.tx2, padding: "4px 10px", borderRadius: 100, fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}>{q}</button>
+            ))}
+          </div>
+
+          {/* input */}
+          <div style={{ padding: "10px 12px", borderTop: `1px solid ${C.brd}`, display: "flex", gap: 8 }}>
+            <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key === "Enter" && handleChat(input)}
+              placeholder="Describe your violation..."
+              style={{ flex: 1, background: C.el, border: `1px solid ${C.brd}`, borderRadius: 10, padding: "9px 13px", color: C.tx, fontFamily: "inherit", fontSize: 13, outline: "none" }} />
+            <button onClick={() => handleChat(input)}
+              style={{ background: C.danger, border: "none", borderRadius: 10, width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", fontSize: 15, color: "#fff", flexShrink: 0 }}>➤</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
