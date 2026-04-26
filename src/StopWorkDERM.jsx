@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { supabase } from "./lib/supabase";
 
 const VIOLATION_TYPES = [
   { id: "stopwork", label: "Stop Work Order", icon: "🛑", color: "#FF4D4D", agency: "Building Dept / DERM / FDEP", urgency: "IMMEDIATE", fine: "$500–$10,000/day", desc: "Work halted by regulatory authority. Every day counts — fines accrue daily until corrective action is documented and accepted." },
@@ -95,6 +96,24 @@ export default function StopWorkDERM() {
       setCaseData(() => fullCase);
       botReply(`<b style="color:#4ADE80">✅ Case Opened: ${cid}</b><br><br>Violation type: ${caseData.type?.label}<br>County: ${caseData.county}<br>Contact: ${nm}<br><br>${caseData.type?.urgency === "IMMEDIATE" ? "🚨 <b>PRIORITY DISPATCH</b> — Our compliance team is mobilizing now. Expect a call within <b>15 minutes</b>." : "Our compliance specialist will call you within <b>30 minutes</b> to review the violation and schedule a site visit."}<br><br>In the meantime: <b>do not resume work</b> until we've assessed the corrective requirements. Continuing work under a stop work order escalates penalties significantly.`, 800);
       setChatPhase("done");
+      // Save lead to Supabase
+      supabase.from("leads").insert([{
+        case_id: cid,
+        type_id: caseData.type?.id,
+        type_label: caseData.type?.label,
+        type_icon: caseData.type?.icon,
+        type_urgency: caseData.type?.urgency,
+        county: caseData.county,
+        violation_date: caseData.date,
+        details: caseData.details,
+        name: nm,
+        phone: ph?.[0],
+        email: em?.[0],
+        source: "chat",
+        status: "new",
+      }]).then(() => {}).catch(() => {});
+
+      // Email notification to SouthVac
       fetch("/api/notify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
