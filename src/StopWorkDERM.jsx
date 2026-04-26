@@ -328,7 +328,7 @@ export default function StopWorkDERM() {
           <style>{`@keyframes chatSlide { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }`}</style>
 
           {/* header */}
-          <div style={{ padding: "14px 16px", borderBottom: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "space-between", borderRadius: "20px 20px 0 0", background: C.el }}>
+          <div style={{ padding: "12px 14px", borderBottom: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "space-between", borderRadius: "20px 20px 0 0", background: C.el }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <div style={{ width: 34, height: 34, background: C.danger, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 700, color: "#fff" }}>!</div>
               <div>
@@ -336,7 +336,10 @@ export default function StopWorkDERM() {
                 <div style={{ fontSize: 10, color: "#4ADE80" }}>● Priority line — immediate response</div>
               </div>
             </div>
-            <div style={{ display: "flex", gap: 6 }}>
+            <div style={{ display: "flex", gap: 5 }}>
+              <button onClick={openTawk} title="Live Agent" style={{ height: 30, padding: "0 10px", borderRadius: 8, background: "rgba(205,255,78,.12)", border: `1px solid rgba(205,255,78,.3)`, display: "flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 700, color: C.acc, cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+                <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#4ADE80", display: "inline-block" }} /> Live Agent
+              </button>
               <a href="tel:+17862777534" title="Call" style={{ width: 30, height: 30, borderRadius: 8, background: C.bg, border: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, textDecoration: "none" }}>📞</a>
               <a href="sms:+17862777534" title="Text" style={{ width: 30, height: 30, borderRadius: 8, background: C.bg, border: `1px solid ${C.brd}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, textDecoration: "none" }}>💬</a>
             </div>
@@ -352,6 +355,25 @@ export default function StopWorkDERM() {
                   : { background: C.el, border: `1px solid ${C.brd}`, alignSelf: "flex-start", borderBottomLeftRadius: 3 })
               }} dangerouslySetInnerHTML={{ __html: m.t }} />
             ))}
+
+            {/* Live agent CTA after case is submitted */}
+            {chatPhase === "done" && (
+              <div style={{ alignSelf: "flex-start", width: "100%", maxWidth: "92%" }}>
+                <div style={{ background: "rgba(205,255,78,.06)", border: `1px solid rgba(205,255,78,.2)`, borderRadius: 14, padding: "12px 14px", marginTop: 4 }}>
+                  <div style={{ fontSize: 12, color: C.acc, fontWeight: 700, marginBottom: 8 }}>Want to speak with someone now?</div>
+                  <button onClick={openTawk} style={{
+                    width: "100%", background: C.acc, color: C.bg,
+                    border: "none", borderRadius: 8, padding: "9px",
+                    fontWeight: 700, fontSize: 12, cursor: "pointer",
+                    fontFamily: "inherit", display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                  }}>
+                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: C.bg, display: "inline-block" }} />
+                    Connect to Live Agent
+                  </button>
+                </div>
+              </div>
+            )}
+
             <div ref={chatEnd} />
           </div>
 
@@ -360,6 +382,7 @@ export default function StopWorkDERM() {
             {["Stop Work Order", "Turbidity", "SWPPP / BMP", "Dewatering"].map((q, i) => (
               <button key={i} onClick={() => handleChat(q)} style={{ background: C.bg, border: `1px solid ${C.brd}`, color: C.tx2, padding: "4px 10px", borderRadius: 100, fontSize: 11, cursor: "pointer", fontFamily: "inherit" }}>{q}</button>
             ))}
+            <button onClick={openTawk} style={{ background: "rgba(205,255,78,.08)", border: `1px solid rgba(205,255,78,.2)`, color: C.acc, padding: "4px 10px", borderRadius: 100, fontSize: 11, cursor: "pointer", fontFamily: "inherit", fontWeight: 600 }}>💬 Live Agent</button>
           </div>
 
           {/* input */}
