@@ -27,11 +27,37 @@ export default function StopWorkDERM() {
   const [input, setInput] = useState("");
   const [chatPhase, setChatPhase] = useState("init");
   const [caseData, setCaseData] = useState({});
+  const [tawkPopup, setTawkPopup] = useState(false);
+  const [tawkDismissed, setTawkDismissed] = useState(false);
   const chatEnd = useRef(null);
 
   useEffect(() => {
     if (chatEnd.current) chatEnd.current.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Show popup after 6 seconds if not dismissed
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (!tawkDismissed) setTawkPopup(true);
+    }, 6000);
+    return () => clearTimeout(t);
+  }, [tawkDismissed]);
+
+  function openTawk() {
+    setTawkPopup(false);
+    setTawkDismissed(true);
+    if (window.Tawk_API?.maximize) {
+      window.Tawk_API.maximize();
+    } else {
+      window.Tawk_API = window.Tawk_API || {};
+      window.Tawk_API.onLoad = function () { window.Tawk_API.maximize(); };
+    }
+  }
+
+  function dismissTawk() {
+    setTawkPopup(false);
+    setTawkDismissed(true);
+  }
 
   useEffect(() => {
     if (chatOpen && messages.length === 0) {
@@ -168,6 +194,85 @@ export default function StopWorkDERM() {
           📞 Call (786) 277-7534
         </a>
       </div>
+
+      {/* TAWK CHAT POPUP */}
+      {tawkPopup && (
+        <div style={{
+          position: "fixed", bottom: 100, left: 24, zIndex: 300,
+          animation: "slideUp .35s ease",
+        }}>
+          <style>{`
+            @keyframes slideUp {
+              from { opacity: 0; transform: translateY(20px); }
+              to   { opacity: 1; transform: translateY(0); }
+            }
+          `}</style>
+          <div style={{
+            background: C.card, border: `1px solid ${C.brd}`,
+            borderRadius: 20, padding: "20px 20px 16px",
+            width: 280, boxShadow: "0 12px 48px rgba(0,0,0,.5)",
+            position: "relative",
+          }}>
+            {/* dismiss */}
+            <button onClick={dismissTawk} style={{
+              position: "absolute", top: 12, right: 12,
+              background: C.el, border: `1px solid ${C.brd}`, borderRadius: 6,
+              width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", color: C.tx3, fontSize: 12, lineHeight: 1,
+            }}>✕</button>
+
+            {/* avatar + status */}
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+              <div style={{
+                width: 42, height: 42, borderRadius: "50%",
+                background: "linear-gradient(135deg,#CDFF4E,#4ADE80)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 20, flexShrink: 0,
+              }}>💧</div>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: C.tx }}>SouthVac Support</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: "#4ADE80" }}>
+                  <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#4ADE80", display: "inline-block" }} />
+                  Online now
+                </div>
+              </div>
+            </div>
+
+            {/* message bubble */}
+            <div style={{
+              background: C.el, border: `1px solid ${C.brd}`,
+              borderRadius: "12px 12px 12px 4px",
+              padding: "11px 14px", marginBottom: 14,
+              fontSize: 13, color: C.tx, lineHeight: 1.6,
+            }}>
+              👋 Have a violation or stop work order? <b>Chat with us now</b> — we respond immediately.
+            </div>
+
+            {/* CTA */}
+            <button onClick={openTawk} style={{
+              width: "100%", background: C.acc, color: C.bg,
+              border: "none", borderRadius: 10, padding: "11px",
+              fontWeight: 700, fontSize: 13, cursor: "pointer",
+              fontFamily: "'DM Sans', sans-serif",
+            }}>
+              💬 Start Live Chat
+            </button>
+
+            <div style={{ textAlign: "center", marginTop: 10, fontSize: 11, color: C.tx3 }}>
+              or call <a href="tel:+17862777534" style={{ color: C.acc, textDecoration: "none" }}>(786) 277-7534</a>
+            </div>
+          </div>
+
+          {/* pointer arrow */}
+          <div style={{
+            width: 0, height: 0,
+            borderLeft: "10px solid transparent",
+            borderRight: "10px solid transparent",
+            borderTop: `10px solid ${C.brd}`,
+            marginLeft: 28,
+          }} />
+        </div>
+      )}
 
       <div style={{ display: "flex", height: "calc(100vh - 56px)" }}>
         {/* MAIN */}
